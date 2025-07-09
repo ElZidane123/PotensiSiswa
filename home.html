@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dashboard Konseling</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<style>
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: #f3f4f6;
+        border-radius: 4px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background-color: #2563eb;
+        border-radius: 4px;
+    }
+
+
+    /* Custom scrollbar for sidebar */
+    .sidebar::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.1);
+        border-radius: 3px;
+    }
+
+    /* Transition for sidebar sliding */
+    .sidebar {
+        transition: transform 0.3s ease;
+    }
+
+    /* Initially sidebar hidden off-canvas */
+    .sidebar-closed {
+        transform: translateX(-100%);
+    }
+
+    /* Overlay for background when sidebar is open */
+    .overlay {
+        background: rgba(0, 0, 0, 0.4);
+        transition: opacity 0.3s ease;
+    }
+</style>
+
+<body class="min-h-screen bg-white font-sans text-gray-900">
+    <!-- Navbar -->
+    <header class="bg-blue-600 text-white px-6 py-4 flex items-center space-x-4">
+        <button id="burgerBtn" aria-label="Toggle sidebar class=" focus:outline-none">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" viewBox="0 0 24 24">
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <line x1="3" y1="18" x2="21" y2="18" />
+            </svg>
+
+        </button>
+        <h1 class="font-semibold text-lg select-none">Home</h1>
+    </header>
+
+    <!-- Sidebar -->
+    <nav id="sidebar" aria-label="Sidebar navigation"
+        class="sidebar fixed top-0 left-0 z-40 h-full w-64 bg-white shadow-lg overflow-y-auto sidebar-closed flex flex-col px-6 py-8">
+
+        <!-- Close button inside sidebar top-left -->
+        <button id="closeBtn" aria-label="Close sidebar"
+            class="mb-8 self-start rounded-full p-2 bg-gray-200 text-gray-600 hover:bg-gray-300 hover:text-gray-900 transition">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" viewBox="0 0 24 24">
+                <polyline points="15 18 9 12 15 6" />
+            </svg>
+        </button>
+
+        <!-- User Profile -->
+        <div class="flex flex-col items-center mb-10">
+            <div class="w-24 h-24 rounded-full overflow-hidden bg-gray-200 shadow-inner">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/8e2d436f-49e2-464e-b0fc-fff6763bcb96.png"
+                    alt="Profil Muhammad Fajrul Falah, potret siluet abu-abu dengan latar belakang netral, gaya minimalis"
+                    class="w-full h-full object-cover" onerror="this.style.display='none';" />
+            </div>
+            <p class="mt-4 text-center text-gray-900 font-semibold text-lg leading-tight break-words">Muhammad Fajrul
+                Falah, M.Pd.</p>
+        </div>
+
+        <!-- Sidebar Navigation Links -->
+        <ul class="flex-1 space-y-6">
+            <li>
+                <a href="profile.html" class="flex items-center text-gray-500 hover:text-blue-600 transition">
+                    <svg class="w-6 h-6 mr-3 stroke-current" fill="none" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" viewBox="0 0 24 24">
+                        <path d="M20 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M4 21v-2a4 4 0 0 1 3-3.87" />
+                        <circle cx="12" cy="7" r="4" />
+                    </svg>
+                    Profile
+                </a>
+            </li>
+            <li>
+                <a href="#" class="flex items-center text-blue-600 transition">
+                    <svg class="w-6 h-6 mr-3 stroke-current" fill="none" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" viewBox="0 0 24 24">
+                        <path d="M3 9.75L12 4l9 5.75v10.5a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-10.5z" />
+                        <path d="M9 22V12h6v10" />
+                    </svg>
+                    Home
+                </a>
+            </li>
+            <li class="relative">
+                <button id="daftarSiswaBtn" type="button"
+                    class="flex items-center w-full text-gray-500 hover:text-blue-600 transition focus:outline-none">
+                    <svg class="w-6 h-6 mr-3 stroke-current" fill="none" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" viewBox="0 0 24 24">
+                        <path
+                            d="M8 12h8M8 16h6M8 8h8M4 5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5z" />
+                    </svg>
+                    Daftar Siswa
+                    <svg id="dropdownIcon" class="w-4 h-4 ml-auto transition-transform" fill="none"
+                        stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M6 9l6 6 6-6" />
+                    </svg>
+                </button>
+                <ul id="kelasDropdown"
+                    class="absolute left-0 mt-2 w-40 bg-white border border-gray-200 rounded shadow-lg z-50 hidden">
+                    <li>
+                        <a href="dataSiswa.html" class="block px-4 py-2 hover:bg-blue-50 text-gray-700">Kelas X</a>
+                    </li>
+                    <li>
+                        <a href="#" class="block px-4 py-2 hover:bg-blue-50 text-gray-700">Kelas XI</a>
+                    </li>
+                    <li>
+                        <a href="#" class="block px-4 py-2 hover:bg-blue-50 text-gray-700">Kelas XII</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+        <!-- Log Out Button -->
+        <form id="logout">
+            <button type="submit"
+                class="mt-auto bg-red-700 hover:bg-red-800 text-white w-full py-3 rounded-md flex items-center justify-center gap-2 transition">
+                <svg class="w-5 h-5 stroke-current" fill="none" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" viewBox="0 0 24 24">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                    <polyline points="16 17 21 12 16 7" />
+                    <line x1="21" y1="12" x2="9" y2="12" />
+                </svg>
+                Log Out
+            </button>
+        </form>
+
+    </nav>
+
+    <!-- Overlay shown when sidebar open -->
+    <div id="overlay" class="fixed inset-0 z-20 hidden overlay" tabindex="-1" aria-hidden="true"></div>
+
+    <main class="w-full mx-auto p-10 space-y-10">
+        <!-- Data Siswa Section -->
+        <section aria-labelledby="data-siswa-header" class="space-y-4 w-96">
+            <h2 id="data-siswa-header" class="text-black font-semibold text-lg">Data Siswa</h2>
+            <form id="filterForm" class="flex items-center space-x-3 max-w w-full">
+                <input type="text" id="filterInput" name="filterInput"
+                    aria-label="Masukkan nama siswa atau email untuk filter"
+                    placeholder="Masukkan nama siswa atau email..."
+                    class="flex-grow border border-blue-600 rounded-full px-4 py-2 focus:outline-none focus:border-blue-700 transition" />
+
+                <div class="inline-block relative" id="filter-container">
+                    <div id="filter-button" aria-haspopup="true" aria-expanded="false" aria-controls="filter-menu"
+                        class="inline-flex items-center border border-blue-600 rounded-full shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors cursor-pointer">
+                        Filter
+                        <svg class="ml-2 -mr-1 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
+
+                    <!-- Dropdown Menu -->
+                    <div id="filter-menu" role="menu" aria-labelledby="filter-button"
+                        class="origin-top-left absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none invisible opacity-0 transition-opacity max-h-52 overflow-auto custom-scrollbar z-50">
+                        <div class="py-1" role="none">
+                            <!-- First group: RPL, TKJ, PG -->
+                            <div class="flex justify-between px-3 mb-2 text-xs font-semibold text-gray-400 select-none">
+                                <span>Jurusan</span>
+                            </div>
+                            <button role="menuitem" tabindex="-1"
+                                class="block w-full text-left px-4 py-2 text-gray-400 font-semibold hover:bg-blue-50 hover:text-blue-600 focus:bg-blue-100"
+                                data-filter="RPL">RPL</button>
+                            <button role="menuitem" tabindex="-1"
+                                class="block w-full text-left px-4 py-2 text-gray-400 font-semibold hover:bg-blue-50 hover:text-blue-600 focus:bg-blue-100"
+                                disabled>TKJ</button>
+                            <button role="menuitem" tabindex="-1"
+                                class="block w-full text-left px-4 py-2 text-gray-400 font-semibold hover:bg-blue-50 hover:text-blue-600 focus:bg-blue-100"
+                                disabled>PG</button>
+
+                            <div class="border-t border-gray-200 my-2"></div>
+
+                            <!-- Second group: 31, 32, 33 -->
+                            <div class="flex justify-between px-3 mb-2 text-xs font-semibold text-gray-400 select-none">
+                                <span>Angkatan</span>
+                            </div>
+                            <button role="menuitem" tabindex="-1"
+                                class="block w-full text-left px-4 py-2 text-gray-400 font-semibold hover:bg-blue-50 hover:text-blue-600 focus:bg-blue-100"
+                                disabled>31</button>
+                            <button role="menuitem" tabindex="-1"
+                                class="block w-full text-left px-4 py-2 text-gray-400 font-semibold hover:bg-blue-50 hover:text-blue-600 focus:bg-blue-100"
+                                disabled>32</button>
+                            <button role="menuitem" tabindex="-1"
+                                class="block w-full text-left px-4 py-2 text-gray-400 font-semibold hover:bg-blue-50 hover:text-blue-600 focus:bg-blue-100"
+                                data-filter="33">33</button>
+
+                            <div class="border-t border-gray-200 my-2"></div>
+
+                            <!-- Third group: X, XI, XII -->
+                            <div class="flex justify-between px-3 mb-2 text-xs font-semibold text-gray-400 select-none">
+                                <span>Kelas</span>
+                            </div>
+                            <button role="menuitem" tabindex="-1"
+                                class="block w-full text-left px-4 py-2 text-gray-400 font-semibold hover:bg-blue-50 hover:text-blue-600 focus:bg-blue-100"
+                                disabled>X</button>
+                            <button role="menuitem" tabindex="-1"
+                                class="block w-full text-left px-4 py-2 text-gray-400 font-semibold hover:bg-blue-50 hover:text-blue-600 focus:bg-blue-100"
+                                disabled>XI</button>
+                            <button role="menuitem" tabindex="-1"
+                                class="block w-full text-left px-4 py-2 text-gray-400 font-semibold hover:bg-blue-50 hover:text-blue-600 focus:bg-blue-100"
+                                data-filter="XII">XII</button>
+                        </div>
+                    </div>
+                </div>
+
+                </div>
+            </form>
+
+        </section>
+
+        <!-- Histori Konseling Section -->
+        <section aria-labelledby="histori-header" class="space-y-4">
+            <h2 id="histori-header" class="text-black font-semibold text-lg">Histori konseling</h2>
+            <!-- Tabs for sorting -->
+            <div role="tablist" aria-label="Sorting buttons" class="flex space-x-1 mb-2">
+                <button role="tab" aria-selected="true" id="sort-tanggal-tab" aria-controls="sort-tanggal-panel"
+                    data-sort-type="tanggal"
+                    class="bg-blue-600 text-white px-3 py-1 text-xs rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700">
+                    Urutkan sesuai tanggal
+                </button>
+                <button role="tab" aria-selected="false" id="sort-kelas-tab" aria-controls="sort-kelas-panel"
+                    data-sort-type="kelas"
+                    class="bg-blue-600 text-white px-3 py-1 text-xs rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700">
+                    Urutkan sesuai kelas
+                </button>
+            </div>
+
+            <!-- List of counseling history -->
+            <ul id="historiList" role="tabpanel" aria-labelledby="sort-tanggal-tab"
+                class="border border-gray-300 rounded-md divide-y divide-gray-300">
+                <!-- Entries will be dynamically managed by JS -->
+                <li class="flex justify-between items-center px-6 py-4">
+                    <div>
+                        <p class="font-semibold text-black select-text">Bunga Amelia</p>
+                        <p class="text-gray-600 text-sm select-text">X RPL 7</p>
+                    </div>
+                    <time datetime="2025-05-21" class="text-gray-400 font-semibold select-text">21/05/2025</time>
+                    <button type="button"
+                        class="bg-green-500 hover:bg-green-600 transition text-white rounded-md px-4 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                        aria-label="Lihat detail konseling Bunga Amelia">
+                        Lihat
+                    </button>
+                </li>
+                <li class="flex justify-between items-center px-6 py-4">
+                    <div>
+                        <p class="font-semibold text-black select-text">Aji Johan Ramadhan</p>
+                        <p class="text-gray-600 text-sm select-text">X RPL 7</p>
+                    </div>
+                    <time datetime="2025-05-21" class="text-gray-400 font-semibold select-text">21/05/2025</time>
+                    <button type="button"
+                        class="bg-green-500 hover:bg-green-600 transition text-white rounded-md px-4 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                        aria-label="Lihat detail konseling Aji Johan Ramadhan">
+                        Lihat
+                    </button>
+                </li>
+                <!-- Additional empty space for visual balance -->
+                <li class="h-24" aria-hidden="true"></li>
+                <li class="h-24" aria-hidden="true"></li>
+            </ul>
+        </section>
+    </main>
+
+    <script>
+        //logout
+        logout.addEventListener("submit", (event) => {
+            event.preventDefault(); // Prevent the default form submission
+            // Redirect to the next page (replace 'next-page.html' with your actual page)
+            window.location.href = 'login.html'; // Change this to your desired URL
+        });
+
+
+        // ...existing code...
+        // Dropdown Daftar Siswa
+        const daftarSiswaBtn = document.getElementById('daftarSiswaBtn');
+        const kelasDropdown = document.getElementById('kelasDropdown');
+        const dropdownIcon = document.getElementById('dropdownIcon');
+
+        daftarSiswaBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            kelasDropdown.classList.toggle('hidden');
+            dropdownIcon.classList.toggle('rotate-180');
+        });
+
+        // Optional: close dropdown when clicking outside
+        document.addEventListener('click', function (e) {
+            if (!daftarSiswaBtn.contains(e.target) && !kelasDropdown.contains(e.target)) {
+                kelasDropdown.classList.add('hidden');
+                dropdownIcon.classList.remove('rotate-180');
+            }
+        });
+
+        // filter
+        (function () {
+            const filterButton = document.getElementById('filter-button');
+            const filterMenu = document.getElementById('filter-menu');
+            const filterContainer = document.getElementById('filter-container');
+
+            // Toggle dropdown visibility
+            function toggleDropdown() {
+                const isVisible = filterMenu.classList.contains('opacity-100');
+                if (isVisible) {
+                    closeDropdown();
+                } else {
+                    openDropdown();
+                }
+            }
+
+            function openDropdown() {
+                filterMenu.classList.remove('invisible', 'opacity-0');
+                filterMenu.classList.add('opacity-100');
+                filterButton.setAttribute('aria-expanded', 'true');
+                document.addEventListener('click', outsideClickListener);
+                document.addEventListener('keydown', keydownListener);
+            }
+
+            function closeDropdown() {
+                filterMenu.classList.add('invisible', 'opacity-0');
+                filterMenu.classList.remove('opacity-100');
+                filterButton.setAttribute('aria-expanded', 'false');
+                document.removeEventListener('click', outsideClickListener);
+                document.removeEventListener('keydown', keydownListener);
+            }
+
+            // Close dropdown if clicking outside
+            function outsideClickListener(event) {
+                if (!filterContainer.contains(event.target)) {
+                    closeDropdown();
+                }
+            }
+
+            // Keyboard accessibility
+            function keydownListener(event) {
+                if (event.key === 'Escape') {
+                    closeDropdown();
+                    filterButton.focus();
+                }
+            }
+
+            // Handle filter button click
+            filterButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleDropdown();
+            });
+
+            // Handle filter item click
+            // filterMenu.querySelectorAll('button[role="menuitem"]').forEach(item => {
+            //     item.addEventListener('click', (e) => {
+            //         e.preventDefault();
+            //         if (item.disabled) return;
+            //         alert('Filter selected: ' + item.textContent.trim());
+            //         closeDropdown();
+            //     });
+            // });
+        })();
+
+        // JavaScript for sorting tabs
+        const tabs = document.querySelectorAll('[role="tab"]');
+        const historiList = document.getElementById('historiList');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Manage tab selection states
+                tabs.forEach(t => {
+                    t.setAttribute('aria-selected', 'false');
+                    t.classList.remove('ring-2', 'ring-blue-700');
+                });
+                tab.setAttribute('aria-selected', 'true');
+                tab.classList.add('ring-2', 'ring-blue-700');
+
+                // Sort items
+                const sortType = tab.dataset.sortType;
+                sortHistori(sortType);
+
+                // Update aria-labelledby and aria-controls of tabpanel
+                if (sortType === 'tanggal') {
+                    historiList.setAttribute('aria-labelledby', 'sort-tanggal-tab');
+                } else {
+                    historiList.setAttribute('aria-labelledby', 'sort-kelas-tab');
+                }
+            });
+        });
+
+        document.getElementById('filter-button').addEventListener('click', function () {
+            var options = document.getElementById('filter-options');
+            options.classList.toggle('hidden');
+        });
+
+        function sortHistori(type) {
+            const items = Array.from(historiList.querySelectorAll('li:not([aria-hidden="true"])'));
+            let sortedItems;
+
+            if (type === 'tanggal') {
+                sortedItems = items.sort((a, b) => {
+                    const dateA = new Date(a.querySelector('time').getAttribute('datetime'));
+                    const dateB = new Date(b.querySelector('time').getAttribute('datetime'));
+                    return dateA - dateB;
+                });
+            } else if (type === 'kelas') {
+                sortedItems = items.sort((a, b) => {
+                    const classA = a.querySelector('p:nth-child(2)').textContent.trim().toLowerCase();
+                    const classB = b.querySelector('p:nth-child(2)').textContent.trim().toLowerCase();
+                    return classA.localeCompare(classB);
+                });
+            }
+
+            // Clear existing list items except the spacers
+            Array.from(historiList.children).forEach(child => {
+                if (!child.hasAttribute('aria-hidden')) {
+                    historiList.removeChild(child);
+                }
+            });
+
+            // Append sorted items back
+            sortedItems.forEach(item => historiList.insertBefore(item, historiList.querySelector('li[hiden]') || null));
+        }
+
+        //navbar
+        const burgerBtn = document.getElementById('burgerBtn');
+        const sidebar = document.getElementById('sidebar');
+        const closeBtn = document.getElementById('closeBtn');
+        const overlay = document.getElementById('overlay');
+
+        function openSidebar() {
+            sidebar.classList.remove('sidebar-closed');
+            overlay.classList.remove('hidden');
+            // Trap focus inside sidebar for accessibility could be added here
+        }
+
+        function closeSidebar() {
+            sidebar.classList.add('sidebar-closed');
+            overlay.classList.add('hidden');
+        }
+
+        burgerBtn.addEventListener('click', () => {
+            openSidebar();
+        });
+
+        closeBtn.addEventListener('click', () => {
+            closeSidebar();
+        });
+
+        overlay.addEventListener('click', () => {
+            closeSidebar();
+        });
+
+        // Optional: Close sidebar on pressing ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "Escape" && !sidebar.classList.contains('sidebar-closed')) {
+                closeSidebar();
+            }
+        });
+
+        // Filter functionality for Data Siswa input
+        document.getElementById('filterForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const query = e.target.filterInput.value.trim().toLowerCase();
+            if (!query) return;
+
+            // Search among histori entries names or emails (email not present currently)
+            const items = historiList.querySelectorAll('li:not([aria-hidden="true"])');
+            items.forEach(item => {
+                const name = item.querySelector('p.font-semibold')?.textContent.toLowerCase() || '';
+                // No email in data; could be added if needed
+                if (name.includes(query)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

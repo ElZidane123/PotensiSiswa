@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Filter Dropdown UI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom scrollbar for dropdown */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 8px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f3f4f6; /* Tailwind gray-100 */
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background-color: #2563eb; /* Tailwind blue-600 */
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 flex items-center justify-center min-h-screen p-4">
+  <div class="space-y-6">
+
+    <!-- Filter Buttons with Dropdown -->
+    <div class="inline-block relative" id="filter-container">
+      <button id="filter-button" aria-haspopup="true" aria-expanded="false" aria-controls="filter-menu"
+        class="inline-flex items-center border border-gray-300 rounded-md shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+      >
+        Filter
+        <svg class="ml-2 -mr-1 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none"
+          viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      <!-- Dropdown Menu -->
+      <div id="filter-menu" role="menu" aria-labelledby="filter-button"
+        class="origin-top-left absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none invisible opacity-0 transition-opacity max-h-52 overflow-auto custom-scrollbar z-50"
+      >
+        <div class="py-1" role="none">
+          <!-- First group: RPL, TKJ, PG -->
+          <div class="flex justify-between px-3 mb-2 text-xs font-semibold text-gray-400 select-none">
+            <span>Class</span>
+          </div>
+          <button
+            role="menuitem"
+            tabindex="-1"
+            class="block w-full text-left px-4 py-2 text-blue-600 font-semibold hover:bg-blue-50 focus:bg-blue-100"
+            data-filter="RPL"
+          >RPL</button>
+          <button
+            role="menuitem"
+            tabindex="-1"
+            class="block w-full text-left px-4 py-2 text-gray-400 cursor-not-allowed"
+            disabled
+          >TKJ</button>
+          <button
+            role="menuitem"
+            tabindex="-1"
+            class="block w-full text-left px-4 py-2 text-gray-400 cursor-not-allowed"
+            disabled
+          >PG</button>
+
+          <div class="border-t border-gray-200 my-2"></div>
+
+          <!-- Second group: 31, 32, 33 -->
+          <div class="flex justify-between px-3 mb-2 text-xs font-semibold text-gray-400 select-none">
+            <span>Number</span>
+          </div>
+          <button
+            role="menuitem"
+            tabindex="-1"
+            class="block w-full text-left px-4 py-2 text-gray-400 cursor-not-allowed"
+            disabled
+          >31</button>
+          <button
+            role="menuitem"
+            tabindex="-1"
+            class="block w-full text-left px-4 py-2 text-gray-400 cursor-not-allowed"
+            disabled
+          >32</button>
+          <button
+            role="menuitem"
+            tabindex="-1"
+            class="block w-full text-left px-4 py-2 text-blue-600 font-semibold hover:bg-blue-50 focus:bg-blue-100"
+            data-filter="33"
+          >33</button>
+
+          <div class="border-t border-gray-200 my-2"></div>
+
+          <!-- Third group: X, XI, XII -->
+          <div class="flex justify-between px-3 mb-2 text-xs font-semibold text-gray-400 select-none">
+            <span>Level</span>
+          </div>
+          <button
+            role="menuitem"
+            tabindex="-1"
+            class="block w-full text-left px-4 py-2 text-gray-400 cursor-not-allowed"
+            disabled
+          >X</button>
+          <button
+            role="menuitem"
+            tabindex="-1"
+            class="block w-full text-left px-4 py-2 text-gray-400 cursor-not-allowed"
+            disabled
+          >XI</button>
+          <button
+            role="menuitem"
+            tabindex="-1"
+            class="block w-full text-left px-4 py-2 text-blue-600 font-semibold hover:bg-blue-50 focus:bg-blue-100"
+            data-filter="XII"
+          >XII</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    (function () {
+      const filterButton = document.getElementById('filter-button');
+      const filterMenu = document.getElementById('filter-menu');
+      const filterContainer = document.getElementById('filter-container');
+
+      // Toggle dropdown visibility
+      function toggleDropdown() {
+        const isVisible = filterMenu.classList.contains('opacity-100');
+        if (isVisible) {
+          closeDropdown();
+        } else {
+          openDropdown();
+        }
+      }
+
+      function openDropdown() {
+        filterMenu.classList.remove('invisible', 'opacity-0');
+        filterMenu.classList.add('opacity-100');
+        filterButton.setAttribute('aria-expanded', 'true');
+        document.addEventListener('click', outsideClickListener);
+        document.addEventListener('keydown', keydownListener);
+      }
+
+      function closeDropdown() {
+        filterMenu.classList.add('invisible', 'opacity-0');
+        filterMenu.classList.remove('opacity-100');
+        filterButton.setAttribute('aria-expanded', 'false');
+        document.removeEventListener('click', outsideClickListener);
+        document.removeEventListener('keydown', keydownListener);
+      }
+      
+      // Close dropdown if clicking outside
+      function outsideClickListener(event) {
+        if (!filterContainer.contains(event.target)) {
+          closeDropdown();
+        }
+      }
+
+      // Keyboard accessibility
+      function keydownListener(event) {
+        if (event.key === 'Escape') {
+          closeDropdown();
+          filterButton.focus();
+        }
+      }
+
+      // Handle filter button click
+      filterButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleDropdown();
+      });
+
+      // Handle filter item click
+      filterMenu.querySelectorAll('button[role="menuitem"]').forEach(item => {
+        item.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (item.disabled) return;
+          alert('Filter selected: ' + item.textContent.trim());
+          closeDropdown();
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
+

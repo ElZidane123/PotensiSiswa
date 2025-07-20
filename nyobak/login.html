@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    button#togglePassword {
+      position: absolute;
+      right: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #444;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      outline: none;
+      padding: 0;
+    }
+    
+    .vertical-bar {
+      background: white;
+      border-radius: 9999px;
+      width: 18px;
+      height: 80px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col md:flex-row">
+  <!-- Left side: Login form -->
+  <section class="w-full md:w-1/2 flex justify-center items-center bg-white p-4">
+    <div class="w-full max-w-md shadow-lg rounded-lg p-8">
+      <h1 class="text-3xl font-bold mb-1 text-black">Selamat Datang</h1>
+      <p class="mb-6 text-sm text-gray-700">Single Sign On(SSO)</p>
+      <form class="space-y-6" id="loginForm">
+        <!-- Email -->
+        <div>
+          <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email</label>
+          <input type="email" id="email" placeholder="Isi Alamat Email" required 
+            class="w-full rounded-md border border-gray-300 p-3 text-gray-500 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600"/>
+        </div>
+
+        <!-- Password -->
+        <div class="relative">
+          <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Kata Sandi</label>
+          <input type="password" id="password" placeholder="Isi Kata Sandi" required 
+            class="w-full rounded-md border border-gray-300 p-3 pr-10 text-gray-500 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600" />
+          <button type="button" id="togglePassword" aria-label="Toggle password visibility" tabindex="0">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+              stroke-linejoin="round" class="w-5 h-5" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+
+        <!-- Remember Me -->
+        <div class="flex items-center space-x-2">
+          <input type="checkbox" id="remember" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
+          <label for="remember" class="text-sm text-gray-700 select-none">Ingat Saya</label>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="w-full bg-blue-600 text-white p-3 rounded-md font-medium hover:bg-blue-700 transition-colors duration-200">
+          Masuk
+        </button>
+
+        <!-- Or separator -->
+        <div class="flex items-center justify-center my-6 space-x-4">
+          <hr class="border-gray-300 w-full" />
+          <span class="text-gray-400 text-sm font-semibold">Atau</span>
+          <hr class="border-gray-300 w-full" />
+        </div>
+
+        <!-- Google sign in -->
+        <button type="button" class="w-full border border-blue-600 text-black flex items-center justify-center space-x-2 p-3 rounded-md hover:bg-blue-50 transition-colors duration-200">
+          <img 
+            src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/6a912f51-3863-421b-aa43-5116c930c125.png" 
+            alt="Google logo stylized G letter in multi colors" 
+            class="w-5 h-5" 
+            onerror="this.style.display='none';"
+          />
+          <span class="font-semibold">Masuk dengan Google</span>
+        </button>
+      </form>
+
+      <div id="emailError" class="hidden mt-4 text-center bg-red-100 text-red-700 px-4 py-2 rounded font-semibold"></div>
+    </div>
+  </section>
+
+  <!-- Right side: Blue background with white rectangles and vertical bars -->
+  <section class="w-full md:w-1/2 bg-blue-600 flex justify-center items-center relative overflow-hidden p-4">
+    <div class="space-y-10 flex flex-col items-center">
+      <div class="flex items-center space-x-10">
+        <div class="vertical-bar"></div>
+        <div class="bg-white rounded-lg w-80 h-48 shadow-md"></div>
+      </div>
+      <div class="flex items-center space-x-10">
+        <div class="bg-white rounded-lg w-80 h-48 shadow-md"></div>
+        <div class="vertical-bar"></div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const togglePassword = document.querySelector("#togglePassword");
+    const passwordInput = document.querySelector("#password");
+    const loginForm = document.querySelector("#loginForm");
+    const emailError = document.querySelector("#emailError");
+
+    togglePassword.addEventListener("click", () => {
+      const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+      passwordInput.setAttribute("type", type);
+      togglePassword.innerHTML = type === "password"
+        ? `<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+            stroke-linejoin="round" class="w-5 h-5" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="3"/></svg>`
+        : `<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+            stroke-linejoin="round" class="w-5 h-5" viewBox="0 0 24 24"><path d="M17.94 17.94a10.05 10.05 0 01-5.94 1.84c-7 0-11-8-11-8a21.53 21.53 0 014.82-6.82m2.76-1.8a8.12 8.12 0 014.38-1.32c7 0 11 8 11 8a22.77 22.77 0 01-4.71 6.67M1 1l22 22"/></svg>`;
+    });
+
+    loginForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const email = document.querySelector("#email").value.trim();
+      const allowedPattern = /^[a-zA-Z0-9._%+-]+@student\.smktelkom-mlg\.sch\.id$/;
+      const emailError = document.getElementById("emailError");
+
+      if (!allowedPattern.test(email)) {
+        emailError.textContent = "Email harus menggunakan domain student.smktelkom-mlg.sch.id";
+        emailError.classList.remove("hidden");
+        setTimeout(() => {
+          emailError.classList.add("hidden");
+        }, 3000);
+        return;
+      }
+
+      emailError.classList.add("hidden");
+      window.location.href = 'home.html';
+    });
+  </script>
+</body>
+</html>
